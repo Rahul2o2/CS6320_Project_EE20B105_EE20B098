@@ -30,7 +30,7 @@ If the last bit was 0, both rounding off and truncation would yield the same res
  Our next hurdle came when we had to decide on the conversion process tfrom fp32 to cfloat. Mantissa could be truncated easily, while exponent proved to be a challenge. We had two things to control the 5 exponent bits and a6-bit bias. We deliberated for a while and finally decided on the following:
  First we would check if the exponent was not out of range to be represented in cfloat since it had only 5 or 4 exponent bits. Then we started with a bias of 31 as a starting point. Since the nature of application of cfloat was for neural networks, we figured that numbers would be similar in magnitude and would not require a change in bias frequently. 
 
-![Explanation](images/logo.png)
+![Explanation](images/WhatsApp Image 2023-12-10 at 11.32.46.jpeg)
 
 Our final decision was to forgo pipelining in few simple modules like converting from fp32 to bf16 as it required a simple truncating of mantissa and the pipeling overhead that would be introduced would make the module less efficient.
 
