@@ -57,6 +57,6 @@ One note of caution with the pipelined module is that the user has to wait for 4
 ## Usage
 We have 6 folders each corresponding to a conversion module as indicated by the title. Each contains the bluespec module  bsv code and a testbench to simulate. We have also provided the bluespec code converted to verilog which was used for area estimation in our synthesis tool.
 
-bias.jpeg
+
 
 
