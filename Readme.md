@@ -59,6 +59,20 @@ One note of caution with the pipelined module is that the user has to wait for 4
 ## Usage
 We have 6 folders each corresponding to a conversion module as indicated by the title. Each contains the bluespec module  bsv code and a testbench to simulate. We have also provided the bluespec code converted to verilog which was used for area estimation in our synthesis tool.
 
+## Steps to execute the code
+
+Run the following commands in the terminal by giving converter module filename and test bench file name.
+
+To run the module:
+
+```bsc -sim -g mkmodulename filename.bsv```
+
+To run the Test bench:
+
+```bsc -sim -e mkTb -o ./mkTb_bsim```
+```./mkTb_bsim```
+
+
 
 
 
