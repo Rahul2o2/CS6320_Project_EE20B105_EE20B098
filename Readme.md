@@ -70,6 +70,7 @@ To run the module:
 To run the Test bench:
 
 ```bsc -sim -e mkTb -o ./mkTb_bsim```
+   
 ```./mkTb_bsim```
 
 
