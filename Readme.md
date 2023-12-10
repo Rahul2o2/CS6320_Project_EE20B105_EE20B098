@@ -7,10 +7,8 @@ Area-efficient pipelined converter modules from fp32 datatype to the following d
 - [Overview](#overview)
 - [Design Decisions](#design-decisions)
 - [Verification Methodology](#verification-methodology)
-- [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## Overview
 The project aims to develop area-efficient pipelined converter modules that facilitate the conversion between the IEEE 754 32-bit floating-point (fp32) data type and three specific alternative data types: bfloat16, cfloat8_1_5_2, and cfloat8_1_4_3. The target data types—bfloat16, cfloat8_1_5_2, and cfloat8_1_4_3—represent different formats with varied precision and storage characteristics compared to the standard 32-bit floating-point representation. 
@@ -29,25 +27,34 @@ For instance, consider the number 1.10011, and let's say we aim to convert it to
 - **Choice 2: Rounding off** - Result: 1.1010 (Data increased by \(2^{-4}\))
 If the last bit was 0, both rounding off and truncation would yield the same result. Consequently, we chose truncation.
 
-Our next decision 
+ Our next hurdle came when we had to decide on the conversion process tfrom fp32 to cfloat. Mantissa could be truncated easily, while exponent proved to be a challenge. We had two things to control the 5 exponent bits and a6-bit bias. We deliberated for a while and finally decided on the following:
+ First we would check if the exponent was not out of range to be represented in cfloat since it had only 5 or 4 exponent bits. Then we started with a bias of 31 as a starting point. Since the nature of application of cfloat was for neural networks, we figured that numbers would be similar in magnitude and would not require a change in bias frequently. 
+
+![Explanation](images/logo.png)
+
+Our final decision was to forgo pipelining in few simple modules like converting from fp32 to bf16 as it required a simple truncating of mantissa and the pipeling overhead that would be introduced would make the module less efficient.
 
 ## Verification Methodology
 
-Describe the methodology used to verify the correctness and reliability of your project. This could involve testing procedures, code reviews, and other quality assurance practices.
+We were faced with the decision on how to provide the inputs through testbench. We needed multiple inputs to be passed since we would be pipelining it . We unsuccessfuly tried writing a code for the test bench to read 32-bit inputs froma a file, but this was not supported well by bluespec unlike verilog.
 
-## Installation
+	// Open the file and check for proper opening
+		String readFile = "test.txt" ;
+		File lfh <- $fopen( readFile, "r" ) ;
+	    for (int i = 0; i < 9; i = i + 1) begin
+      int value <- $fgetc(lfh);
+      if (value != -1) begin
+        data[i] <= pack((value));
+      end else begin
+        $display("Error reading value from %s", readFile);
+      end
+    end
+	$fclose ( lfh ) ;
 
-Provide step-by-step instructions on how to install and set up your project. Include any dependencies that need to be installed.
+Then we proceeded to just stick with an array of registers initialised with the value to be tested. Each module was thoroughly tested for bugs and simulated through testbench.
+One note of caution with the pipelined module is that the user has to wait for 4 cycles  after which the first data would come out through the pipeline and would output a new data each cycle then on.
 
 ## Usage
+We have 6 folders each corresponding to a conversion module as indicated by the title. Each contains the bluespec module  bsv code and a testbench to simulate. We have also provided the bluespec code converted to verilog which was used for area estimation in our synthesis tool.
 
-Explain how to use your project. Provide examples and screenshots if possible. Include any configuration options or special considerations for users.
-
-## Contributing
-
-If you want others to contribute to your project, provide guidelines for them. Include information about how to submit issues or pull requests. Describe the coding standards and any contribution workflows.
-
-## License
-
-Specify the license under which your project is distributed. For example, you can use [MIT License](https://opensource.org/licenses/MIT).
 
