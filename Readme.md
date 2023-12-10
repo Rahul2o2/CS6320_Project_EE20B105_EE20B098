@@ -65,7 +65,7 @@ Run the following commands in the terminal by giving converter module filename a
 
 To run the module:
 
-```bsc -sim -g mkmodulename filename.bsv```
+```bsc -sim -g modulename filename.bsv```
 
 To run the Test bench:
 
