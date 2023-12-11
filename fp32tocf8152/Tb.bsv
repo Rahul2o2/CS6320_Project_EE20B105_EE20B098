@@ -20,7 +20,7 @@ module mkTb (Empty);
 	fp32Array[8]<-mkReg(32'b00101010101010111010100111111001);
 	fp32Array[9]<-mkReg(32'b01000000110010000000000000000000);
 	//Creating an Instance of the interface
-	Ifc_type convert_inst <- mkFP32toCF8152;
+	Ifc_type convert_inst <- mkFP32tocf8152;
 	
 	//sets the first value 
 	rule starter(n<=0);
